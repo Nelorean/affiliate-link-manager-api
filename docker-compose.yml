@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: affiliate_link_manager_db
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: affiliate_user
+      POSTGRES_PASSWORD: affiliate_password
+      POSTGRES_DB: affiliate_links
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
