@@ -14,6 +14,26 @@ model User {
   passwordHash String   @map("password_hash")
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @updatedAt @map("updated_at")
+  links        Link[]
 
   @@map("users")
+}
+
+model Link {
+  id          String    @id @default(uuid())
+  userId      String    @map("user_id")
+  title       String
+  originalUrl String    @map("original_url")
+  slug        String    @unique
+  campaign    String?
+  notes       String?
+  clicks      Int       @default(0)
+  isActive    Boolean   @default(true) @map("is_active")
+  expiresAt   DateTime? @map("expires_at")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  user        User      @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@map("links")
 }
