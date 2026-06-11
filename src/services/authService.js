@@ -69,7 +69,26 @@ async function loginUser(data) {
   };
 }
 
+async function getUserById(userId) {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+  if (!user) {
+    const error = new Error('Usuário não encontrado');
+    error.statusCode = 404;
+    throw error;
+  }
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    phone: user.phone,
+    createdAt: user.createdAt,
+  };
+}
+
 module.exports = {
   registerUser,
   loginUser,
+  getUserById,
 };
