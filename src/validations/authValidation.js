@@ -25,6 +25,12 @@ const registerSchema = z
     path: ['confirmPassword'],
   });
 
+const loginSchema = z.object({
+  email: z.email('E-mail inválido').toLowerCase(),
+  password: z.string().min(1, 'Senha é obrigatória'),
+});
+
 module.exports = {
   registerSchema,
+  loginSchema,
 };

@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
-
+const jwt = require('jsonwebtoken');
 const prisma = require('../config/prisma');
 
 async function registerUser(data) {
@@ -8,7 +8,7 @@ async function registerUser(data) {
   });
 
   if (existingUser) {
-    const error = new Error('Email already registered');
+    const error = new Error('Email já cadastrado');
     error.statusCode = 409;
     throw error;
   }
@@ -34,6 +34,42 @@ async function registerUser(data) {
   return user;
 }
 
+async function loginUser(data) {
+  const user = await prisma.user.findUnique({
+    where: { email: data.email },
+  });
+
+  if (!user) {
+    const error = new Error('Email ou senha inválidos');
+    error.statusCode = 401;
+    throw error;
+  }
+  const isPasswordValid = await bcrypt.compare(
+    data.password,
+    user.passwordHash,
+  );
+
+  if (!isPasswordValid) {
+    const error = new Error('Email ou senha inválidos');
+    error.statusCode = 401;
+    throw error;
+  }
+
+  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+    expiresIn: '1d',
+  });
+
+  return {
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    },
+  };
+}
+
 module.exports = {
   registerUser,
+  loginUser,
 };
