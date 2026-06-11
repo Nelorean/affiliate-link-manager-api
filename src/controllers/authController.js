@@ -22,8 +22,14 @@ async function login(req, res) {
     });
   }
 }
+async function me(req,res) {
+  return res.status(200).json({
+    userId: req.userId,
+  });
+}
 
 module.exports = {
   register,
   login,
+  me,
 };
