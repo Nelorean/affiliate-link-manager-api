@@ -7,7 +7,7 @@ async function register(req, res) {
     return res.status(201).json({ user });
   } catch (error) {
     return res.status(error.statusCode || 500).json({
-      message: error.statusCode ? error.message : 'Internal server error',
+      message: error.statusCode ? error.message : 'Erro interno do servidor',
     });
   }
 }

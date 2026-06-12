@@ -10,7 +10,11 @@ const createLinkSchema = z.object({
     .string()
     .trim()
     .max(2048, 'URL deve ter no máximo 2048 caracteres')
-    .httpUrl(),
+    .url('URL inválida')
+    .refine((value) => {
+      const protocol = new URL(value).protocol;
+      return protocol === 'http:' || protocol === 'https:';
+    }, 'A URL deve usar HTTP ou HTTPS'),
   slug: z
     .string()
     .trim()
