@@ -22,7 +22,19 @@ async function list(req, res) {
   }
 }
 
+async function getById(req, res) {
+  try {
+    const link = await linkService.getLinkById(req.userId, req.params.id);
+    return res.status(200).json({ link });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.statusCode ? error.message : 'Erro interno do servidor',
+    });
+  }
+}
+
 module.exports = {
   create,
   list,
+  getById,
 };

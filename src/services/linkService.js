@@ -36,7 +36,20 @@ async function listLinks(userId) {
   return links;
 }
 
+async function getLinkById(userId, linkId) {
+  const link = await prisma.link.findFirst({
+    where: { userId, id: linkId },
+  });
+  if (!link) {
+    const error = new Error('Link não existe');
+    error.statusCode = 404;
+    throw error;
+  }
+  return link;
+}
+
 module.exports = {
   createLink,
   listLinks,
+  getLinkById,
 };

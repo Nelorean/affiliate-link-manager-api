@@ -14,5 +14,6 @@ router.post(
   linkController.create,
 );
 router.get('/', authMiddleware, linkController.list);
+router.get('/:id', authMiddleware, linkController.getById);
 
 module.exports = router;
