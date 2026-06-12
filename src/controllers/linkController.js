@@ -11,6 +11,18 @@ async function create(req, res) {
   }
 }
 
+async function list(req, res) {
+  try {
+    const links = await linkService.listLinks(req.userId);
+    return res.status(200).json({ links });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.statusCode ? error.message : 'Erro interno do servidor',
+    });
+  }
+}
+
 module.exports = {
   create,
+  list,
 };

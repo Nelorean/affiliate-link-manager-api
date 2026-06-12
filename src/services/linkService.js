@@ -25,6 +25,18 @@ async function createLink(userId, data) {
   return link;
 }
 
+async function listLinks(userId) {
+  const links = await prisma.link.findMany({
+    where: { userId },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+
+  return links;
+}
+
 module.exports = {
   createLink,
+  listLinks,
 };

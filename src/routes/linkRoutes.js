@@ -13,5 +13,6 @@ router.post(
   validateBody(createLinkSchema),
   linkController.create,
 );
+router.get('/', authMiddleware, linkController.list);
 
 module.exports = router;
