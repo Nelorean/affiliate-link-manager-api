@@ -76,10 +76,36 @@ async function deactivateLink(userId, linkId) {
   });
   return deactivatedLink;
 }
+async function resolveLinkBySlug(slug) {
+  const link = await prisma.link.findUnique({
+    where: { slug },
+  });
+  if (!link) {
+    const error = new Error('Link não existe');
+    error.statusCode = 404;
+    throw error;
+  }
+  if (!link.isActive) {
+    const error = new Error('Link inativo');
+    error.statusCode = 410;
+    throw error;
+  }
+  if (link.expiresAt && link.expiresAt < new Date()) {
+    const error = new Error('Link expirado');
+    error.statusCode = 410;
+    throw error;
+  }
+  const updatedLink = await prisma.link.update({
+    where: { id: link.id },
+    data: { clicks: { increment: 1 } },
+  });
+  return updatedLink;
+}
 module.exports = {
   createLink,
   listLinks,
   getLinkById,
   updateLink,
   deactivateLink,
+  resolveLinkBySlug,
 };

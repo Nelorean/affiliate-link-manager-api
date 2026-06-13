@@ -56,6 +56,16 @@ async function deactivate(req, res) {
     });
   }
 }
+async function publicRedirect(req, res) {
+  try {
+    const link = await linkService.resolveLinkBySlug(req.params.slug);
+    return res.redirect(link.originalUrl);
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.statusCode ? error.message : 'Erro interno do servidor',
+    });
+  }
+}
 
 module.exports = {
   create,
@@ -63,4 +73,5 @@ module.exports = {
   getById,
   update,
   deactivate,
+  publicRedirect,
 };
