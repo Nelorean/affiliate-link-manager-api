@@ -25,15 +25,46 @@ async function createLink(userId, data) {
   return link;
 }
 
-async function listLinks(userId) {
+async function listLinks(userId, validatedQuery) {
+  const { page, limit, campaign, search, isActive } = validatedQuery;
+  const skip = (page - 1) * limit;
+  const where = { userId };
+  if (campaign) {
+    where.campaign = campaign;
+  }
+  if (isActive !== undefined) {
+    where.isActive = isActive;
+  }
+  if (search) {
+    where.OR = [
+      {
+        title: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+      {
+        slug: {
+          contains: search,
+          mode: 'insensitive',
+        },
+      },
+    ];
+  }
   const links = await prisma.link.findMany({
-    where: { userId },
+    where,
+    skip,
+    take: limit,
     orderBy: {
       createdAt: 'desc',
     },
   });
-
-  return links;
+  const total = await prisma.link.count({
+    where,
+  });
+  const totalPages = Math.ceil(total / limit);
+  const returnObj = { links, page, limit, total, totalPages };
+  return returnObj;
 }
 
 async function getLinkById(userId, linkId) {

@@ -13,13 +13,13 @@ async function create(req, res) {
 
 async function list(req, res) {
   try {
-    const links = await linkService.listLinks(req.userId);
-    return res.status(200).json({ links });
+    const result = await linkService.listLinks(req.userId, req.validatedQuery);
+    return res.status(200).json(result);
   } catch (error) {
     return res.status(error.statusCode || 500).json({
       message: error.statusCode ? error.message : 'Erro interno do servidor',
     });
-  }
+  } 
 }
 
 async function getById(req, res) {

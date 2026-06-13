@@ -97,7 +97,18 @@ const updateLinkSchema = z.object({
     .optional(),
   isActive: z.boolean().optional(),
 });
+const listLinksQuerySchema = z.object({
+  page: z.coerce.number().int().min(1).default(1),
+  limit: z.coerce.number().int().min(1).max(100).default(20),
+  campaign: z.string().trim().max(100).optional(),
+  search: z.string().trim().max(100).optional(),
+  isActive: z
+    .enum(['true', 'false'])
+    .transform((value) => value === 'true')
+    .optional(),
+});
 module.exports = {
   createLinkSchema,
   updateLinkSchema,
+  listLinksQuerySchema,
 };

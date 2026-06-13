@@ -6,7 +6,9 @@ const validateBody = require('../middlewares/validateBody');
 const {
   createLinkSchema,
   updateLinkSchema,
+  listLinksQuerySchema,
 } = require('../validations/linkValidation');
+const validateQuery = require('../middlewares/validateQuery');
 
 const router = express.Router();
 
@@ -16,7 +18,12 @@ router.post(
   validateBody(createLinkSchema),
   linkController.create,
 );
-router.get('/', authMiddleware, linkController.list);
+router.get(
+  '/',
+  authMiddleware,
+  validateQuery(listLinksQuerySchema),
+  linkController.list,
+);
 router.get('/:id', authMiddleware, linkController.getById);
 router.patch(
   '/:id',
