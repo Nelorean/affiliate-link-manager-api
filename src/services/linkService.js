@@ -47,9 +47,39 @@ async function getLinkById(userId, linkId) {
   }
   return link;
 }
+async function updateLink(userId, linkId, data) {
+  const link = await getLinkById(userId, linkId);
+  if (data.slug && data.slug !== link.slug) {
+    const conflictingLink = await prisma.link.findUnique({
+      where: { slug: data.slug },
+    });
+    if (conflictingLink) {
+      const error = new Error('Slug já existente');
+      error.statusCode = 409;
+      throw error;
+    }
+  }
+  const updatedLink = await prisma.link.update({
+    where: { id: linkId },
+    data,
+  });
+  return updatedLink;
+}
 
+async function deactivateLink(userId, linkId) {
+  await getLinkById(userId, linkId);
+  const deactivatedLink = await prisma.link.update({
+    where: { id: linkId },
+    data: {
+      isActive: false,
+    },
+  });
+  return deactivatedLink;
+}
 module.exports = {
   createLink,
   listLinks,
   getLinkById,
+  updateLink,
+  deactivateLink,
 };

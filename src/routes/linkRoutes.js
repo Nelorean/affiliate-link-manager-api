@@ -3,7 +3,10 @@ const express = require('express');
 const linkController = require('../controllers/linkController');
 const authMiddleware = require('../middlewares/authMiddleware');
 const validateBody = require('../middlewares/validateBody');
-const { createLinkSchema } = require('../validations/linkValidation');
+const {
+  createLinkSchema,
+  updateLinkSchema,
+} = require('../validations/linkValidation');
 
 const router = express.Router();
 
@@ -15,5 +18,12 @@ router.post(
 );
 router.get('/', authMiddleware, linkController.list);
 router.get('/:id', authMiddleware, linkController.getById);
+router.patch(
+  '/:id',
+  authMiddleware,
+  validateBody(updateLinkSchema),
+  linkController.update,
+);
+router.delete('/:id', authMiddleware, linkController.deactivate);
 
 module.exports = router;

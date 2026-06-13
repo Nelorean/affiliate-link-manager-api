@@ -32,9 +32,35 @@ async function getById(req, res) {
     });
   }
 }
+async function update(req, res) {
+  try {
+    const link = await linkService.updateLink(
+      req.userId,
+      req.params.id,
+      req.body,
+    );
+    return res.status(200).json({ link });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.statusCode ? error.message : 'Erro interno do servidor',
+    });
+  }
+}
+async function deactivate(req, res) {
+  try {
+    const link = await linkService.deactivateLink(req.userId, req.params.id);
+    return res.status(200).json({ link });
+  } catch (error) {
+    return res.status(error.statusCode || 500).json({
+      message: error.statusCode ? error.message : 'Erro interno do servidor',
+    });
+  }
+}
 
 module.exports = {
   create,
   list,
   getById,
+  update,
+  deactivate,
 };
