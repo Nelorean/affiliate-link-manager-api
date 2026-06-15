@@ -33,7 +33,6 @@ API REST para criar, organizar e acompanhar links de afiliados, com autenticaç�
 
 ### Pré-requisitos
 
-- Node.js
 - Docker Desktop
 - Git
 
@@ -44,13 +43,7 @@ git clone https://github.com/Nelorean/affiliate-link-manager-api.git
 cd affiliate-link-manager-api
 ```
 
-### 2. Instale as dependências
-
-```bash
-npm install
-```
-
-### 3. Configure as variáveis de ambiente
+### 2. Configure as variáveis de ambiente
 
 Crie um arquivo `.env` com base no `.env.example`:
 
@@ -60,28 +53,45 @@ DATABASE_URL="postgresql://affiliate_user:affiliate_password@localhost:5432/affi
 JWT_SECRET="substitua_por_uma_chave_segura"
 ```
 
-### 4. Inicie o PostgreSQL
+### 3. Inicie a API e o PostgreSQL
 
 ```bash
-docker compose up -d
+docker compose up --build -d
 ```
 
-### 5. Aplique as migrations
+### 4. Aplique as migrations
 
 ```bash
-npx prisma migrate deploy
+docker compose exec api npx prisma migrate deploy
 ```
 
-### 6. Inicie a API
+Para acompanhar os logs da API:
 
 ```bash
-npm run dev
+docker compose logs -f api
 ```
 
-A API estará disponível em:
+Para encerrar os containers:
+
+```bash
+docker compose down
+```
+
+Após a inicialização, a API estará disponível em:
 
 ```text
 http://localhost:3000
+```
+
+### Execução local para desenvolvimento
+
+Para executar a API localmente, é necessário ter o Node.js instalado:
+
+```bash
+npm install
+docker compose up -d postgres
+npx prisma migrate deploy
+npm run dev
 ```
 
 ## Documentação da API
