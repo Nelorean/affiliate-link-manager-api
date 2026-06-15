@@ -2,6 +2,12 @@
 
 API REST para criar, organizar e acompanhar links de afiliados, com autenticação JWT, PostgreSQL e redirecionamento por URLs personalizadas.
 
+## Demonstração
+
+- API em produção: https://affiliate-link-manager-api.onrender.com
+- Documentação Swagger: https://affiliate-link-manager-api.onrender.com/api-docs
+- Health check: https://affiliate-link-manager-api.onrender.com/health
+
 ## Funcionalidades
 
 - Cadastro e autenticação de usuários com JWT
