@@ -4,7 +4,7 @@
   "description": "API for managing affiliate links and short URLs.",
   "main": "src/server.js",
   "scripts": {
-    "dev": "nodemon src/server.js",
+    "dev": "nodemon --ext js,json,yaml src/server.js",
     "start": "node src/server.js",
     "lint": "eslint src/ tests/",
     "lint:fix": "eslint src/ tests/ --fix",
@@ -15,7 +15,9 @@
     "test": "jest --runInBand"
   },
   "jest": {
-    "setupFiles": ["<rootDir>/tests/setup.js"]
+    "setupFiles": [
+      "<rootDir>/tests/setup.js"
+    ]
   },
   "keywords": [],
   "author": "",
@@ -30,6 +32,8 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.21.0",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {
