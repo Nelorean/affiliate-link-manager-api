@@ -19,7 +19,7 @@ async function list(req, res) {
     return res.status(error.statusCode || 500).json({
       message: error.statusCode ? error.message : 'Erro interno do servidor',
     });
-  } 
+  }
 }
 
 async function getById(req, res) {
