@@ -12,7 +12,8 @@
     "format:check": "prettier src/ tests/ --check",
     "prisma:migrate": "prisma migrate dev",
     "prisma:studio": "prisma studio",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand",
+    "start:prod": "prisma migrate deploy && npm start"
   },
   "jest": {
     "setupFiles": [
