@@ -107,7 +107,7 @@ async function deactivateLink(userId, linkId) {
   });
   return deactivatedLink;
 }
-async function resolveLinkBySlug(slug) {
+async function getValidLinkBySlug(slug) {
   const link = await prisma.link.findUnique({
     where: { slug },
   });
@@ -126,6 +126,18 @@ async function resolveLinkBySlug(slug) {
     error.statusCode = 410;
     throw error;
   }
+
+  return link;
+}
+
+async function resolveLinkBySlug(slug, options = {}) {
+  const { countClick = true } = options;
+  const link = await getValidLinkBySlug(slug);
+
+  if (!countClick) {
+    return link;
+  }
+
   const updatedLink = await prisma.link.update({
     where: { id: link.id },
     data: { clicks: { increment: 1 } },
@@ -138,5 +150,6 @@ module.exports = {
   getLinkById,
   updateLink,
   deactivateLink,
+  getValidLinkBySlug,
   resolveLinkBySlug,
 };

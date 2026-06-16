@@ -568,7 +568,14 @@ describe('GET /r/:slug', () => {
 
     const linkId = createResponse.body.link.id;
 
+    const headResponse = await request(app).head('/r/curso-node');
+
+    const beforeRedirectResponse = await request(app)
+      .get(`/links/${linkId}`)
+      .set('Authorization', `Bearer ${loginToken}`);
+
     const response = await request(app).get('/r/curso-node');
+    const duplicateResponse = await request(app).get('/r/curso-node');
 
     const incrementResponse = await request(app)
       .get(`/links/${linkId}`)
@@ -577,7 +584,10 @@ describe('GET /r/:slug', () => {
     expect(registerResponse.status).toBe(201);
     expect(loginResponse.status).toBe(200);
     expect(createResponse.status).toBe(201);
+    expect(headResponse.status).toBe(302);
+    expect(beforeRedirectResponse.body.link.clicks).toBe(0);
     expect(response.status).toBe(302);
+    expect(duplicateResponse.status).toBe(302);
     expect(response.headers.location).toBe(linkData.originalUrl);
     expect(incrementResponse.body.link.clicks).toBe(1);
   });

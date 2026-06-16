@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
+app.head('/r/:slug', linkController.publicRedirectHead);
 app.get('/r/:slug', linkController.publicRedirect);
 app.use('/auth', authRoutes);
 app.use('/links', linkRoutes);
